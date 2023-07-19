@@ -6,8 +6,14 @@ describe('Testes da Funcionalidade Usuários', () => {
          //TODO: 
     });
 
-    it('Deve listar usuários cadastrados', () => {
-         //TODO: 
+    it.only('Deve listar usuários cadastrados', () => {
+         cy.request({
+          method: 'GET',
+          url: 'usuarios' 
+         }).then((response) => {
+          expect(response.body.usuarios[0].nome).to.equal('Fulano da Silva')
+          expect(response.status).to.equal(200)
+         })
     });
 
     it('Deve cadastrar um usuário com sucesso', () => {
