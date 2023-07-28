@@ -56,6 +56,15 @@ describe("Testes da Funcionalidade Usuários", () => {
   });
 
   it("Deve deletar um usuário previamente cadastrado", () => {
-    //TODO:
+    cy.request('usuarios').then(response => {
+      const id = response.body.usuarios[3]._id
+      cy.request({
+        method: 'DELETE',
+        url: `usuarios/${id}`
+      }).then((response) => {
+        expect(response.status).to.equal(200);
+        expect(response.body.message).to.match(/Registro excluído com sucesso|Nenhum registro excluído/);     
+      })
+    })
   });
 });
