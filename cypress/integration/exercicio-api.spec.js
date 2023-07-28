@@ -21,7 +21,7 @@ describe("Testes da Funcionalidade Usuários", () => {
       method: "POST",
       url: "usuarios",
       body: {
-        nome: "Fake Name",
+        nome: faker.person.fullName(),
         email: faker.internet.email(),
         password: "teste",
         administrador: "true",
@@ -37,7 +37,22 @@ describe("Testes da Funcionalidade Usuários", () => {
   });
 
   it("Deve editar um usuário previamente cadastrado", () => {
-    //TODO:
+    cy.request('usuarios').then(response => {
+      const id = response.body.usuarios[1]._id
+      cy.request({
+        method: 'PUT',
+        url: `usuarios/${id}`,
+        body: {
+          "nome": "Fulano Editado",
+          "email": faker.internet.email(),
+          "password": "teste",
+          "administrador": "true"
+        }
+      }).then((response) => {
+        expect(response.status).to.equal(200);
+        expect(response.body.message).to.equal("Registro alterado com sucesso")
+      })
+    })
   });
 
   it("Deve deletar um usuário previamente cadastrado", () => {
