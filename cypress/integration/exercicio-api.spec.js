@@ -1,9 +1,16 @@
 /// <reference types="cypress" />
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
+import usuariosSchema from "../contracts/usuarios.contract";
 
 describe("Testes da Funcionalidade Usuários", () => {
+
   it("Deve validar contrato de usuários", () => {
-    //TODO:
+    cy.request({
+      url: "usuarios",
+      headers: { "cache-control": "no-cache" },
+    }).then((response) => {
+      return usuariosSchema.validateAsync(response.body);
+    });
   });
 
   it("Deve listar usuários cadastrados", () => {
@@ -28,7 +35,7 @@ describe("Testes da Funcionalidade Usuários", () => {
       },
     }).then((response) => {
       expect(response.status).to.equal(201);
-      expect(response.body.message).to.equal("Cadastro realizado com sucesso")
+      expect(response.body.message).to.equal("Cadastro realizado com sucesso");
     });
   });
 
@@ -37,34 +44,36 @@ describe("Testes da Funcionalidade Usuários", () => {
   });
 
   it("Deve editar um usuário previamente cadastrado", () => {
-    cy.request('usuarios').then(response => {
-      const id = response.body.usuarios[1]._id
+    cy.request("usuarios").then((response) => {
+      const id = response.body.usuarios[1]._id;
       cy.request({
-        method: 'PUT',
+        method: "PUT",
         url: `usuarios/${id}`,
         body: {
-          "nome": "Fulano Editado",
-          "email": faker.internet.email(),
-          "password": "teste",
-          "administrador": "true"
-        }
+          nome: "Fulano Editado",
+          email: faker.internet.email(),
+          password: "teste",
+          administrador: "true",
+        },
       }).then((response) => {
         expect(response.status).to.equal(200);
-        expect(response.body.message).to.equal("Registro alterado com sucesso")
-      })
-    })
+        expect(response.body.message).to.equal("Registro alterado com sucesso");
+      });
+    });
   });
 
   it("Deve deletar um usuário previamente cadastrado", () => {
-    cy.request('usuarios').then(response => {
-      const id = response.body.usuarios[3]._id
+    cy.request("usuarios").then((response) => {
+      const id = response.body.usuarios[3];
       cy.request({
-        method: 'DELETE',
-        url: `usuarios/${id}`
+        method: "DELETE",
+        url: `usuarios/${id}`,
       }).then((response) => {
         expect(response.status).to.equal(200);
-        expect(response.body.message).to.match(/Registro excluído com sucesso|Nenhum registro excluído/);     
-      })
-    })
+        expect(response.body.message).to.match(
+          /Registro excluído com sucesso|Nenhum registro excluído/
+        );
+      });
+    });
   });
 });
