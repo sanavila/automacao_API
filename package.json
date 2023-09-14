@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start-server": "npx serverest",
+    "test": "npm cypress run",
+    "start": "npx serverest",
     "cy:run": "npx cypress run",
     "cy:report": "npx mochawesome-merge ./mochawesome-report/mochawesome*.json  > mochawesome-report/report.json && npx marge mochawesome-report/report.json",
-    "ci": "start-server-and-test npx serverest http://localhost:3000/usuarios npm run cy:run"
+    "ci": "start-server-and-test start http://localhost:3000/usuarios test"
   },
   "keywords": [],
   "author": "",
