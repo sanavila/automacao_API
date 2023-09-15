@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar repositório') {
+            steps {
+                git branch: 'main', credentialsId: 'ad14a24c-1e12-4382-b0c4-0459f93d0afe', url: 'https://github.com/sanavila/automacao_API'
+            }
+        }
+        stage('Deve instalar dependencias') {
+            steps {
+                bat 'npm install'
+            }
+        }
+        stage('Instalar cypress') {
+            steps {
+                bat 'npx cypress install'
+            }
+        }
+        stage('Servidor e testes') {
+            steps {
+                bat 'npm run ci'
+            }
+        }
+    }
+}
